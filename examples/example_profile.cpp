@@ -57,9 +57,10 @@ int main(){
 
     std::this_thread::sleep_for(std::chrono::seconds(application_run_time_s));
 
+    std::cout << "Waiting for scheduler..." << std::endl;
     sched.stop();
 
-    std::this_thread::sleep_for(std::chrono::seconds(1));
+    std::this_thread::sleep_for(std::chrono::seconds(application_run_time_s));
     
     auto producer_durations = pool.tx_durations;
     auto consumer_durations = pool.rx_durations;

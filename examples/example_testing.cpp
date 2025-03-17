@@ -53,9 +53,10 @@ int main(){
 
     std::this_thread::sleep_for(std::chrono::seconds(application_run_time_s));
 
+    std::cout << "Waiting for scheduler..." << std::endl;
     sched.stop();
 
-    std::this_thread::sleep_for(std::chrono::seconds(1));
+    std::this_thread::sleep_for(std::chrono::seconds(application_run_time_s));
 
     const auto thresholded_data = task2.get_threshold_data();
     const auto filtered_data = task2.get_filtered_data();
