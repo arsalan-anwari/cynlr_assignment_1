@@ -25,12 +25,12 @@ struct task_data_generator<task_mode::debug, DataPoolType>{
 
     auto task_settings() -> task_settings { return {"Data Generator [Debug]", settings::task_data_generator::DeadlineTaskDebugNs}; };
 
-    std::expected<task_response, task_error> setup() {
+    auto setup() -> std::expected<task_response, task_error> {
         Log(std::format("Data Generator -> setup()"));
         return task_response::success;
     }
     
-    std::expected<task_response, task_error> loop() {
+    auto loop() -> std::expected<task_response, task_error> {
         for(auto& e : tx_data){
             e = rng();
         }
@@ -44,7 +44,7 @@ struct task_data_generator<task_mode::debug, DataPoolType>{
         return task_response::success;
     }
     
-    std::expected<task_response, task_error> stop() { 
+    auto stop() -> std::expected<task_response, task_error> { 
         Log("Data Generator -> stop()");
 		return task_response::success; 
 	}

@@ -21,17 +21,19 @@ namespace cynlr {
         invalid_file_name, invalid_data_format, invalid_data_range
     };
 
-    template<typename T, usize ColumnSize> requires std::integral<T> || std::floating_point<T>
+    template<typename T>
     struct csv_reader {
 
-        csv_reader(cstr file_name, char delimiter = ',') :
+        csv_reader(cstr file_name, isize column_size, char delimiter = ',') :
             file_name(file_name),
+            column_size(column_size),
             delimiter(delimiter)
         {
-            data.reserve(ColumnSize * settings::MinCsvReaderBufferSize);
+            row_data.reserve(column_size);
+            data.reserve(column_size * settings::MinCsvReaderBufferSize);
         }
 
-        auto parse() -> std::expected<std::span<const T>, csv_reader_error> {
+        auto parse() -> std::expected<std::span<T>, csv_reader_error> {
             std::ifstream file(file_name.data());
         
             if (!file.is_open()) {
@@ -42,10 +44,10 @@ namespace cynlr {
             std::string line;
             while (std::getline(file, line)) {  // Read each row
                 std::stringstream ss(line);
-                std::array<T, ColumnSize> row_data {};
+                row_data.clear();
                 usize col = 0;
 
-                while (col < ColumnSize) {
+                while (col < column_size) {
                     std::string token;
                     if (!std::getline(ss, token, delimiter)) {  // Read token
                         break;
@@ -90,7 +92,10 @@ namespace cynlr {
     
     private:
         std::vector<T> data;
+        std::vector<T> row_data;
+
         cstr file_name;
+        isize column_size;
         char delimiter;
 
         bool is_valid_token(const std::string& token) {

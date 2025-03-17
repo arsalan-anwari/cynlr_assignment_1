@@ -24,6 +24,7 @@ namespace cynlr{
         
         static constexpr task_mode type = task_mode::debug;
         static constexpr usize swap_size = (FilterWindowRadius * 2);
+        static constexpr usize window_size = swap_size + 1;
         static constexpr usize rx_batch_size = DataPoolType::rx_batch_size;
         
         using DataType = DataPoolType::buffer_data_type;
@@ -48,7 +49,7 @@ namespace cynlr{
                 consumer_buffer[index++] = value;
                 if (index == index_end) {
                     Log(std::format("RX Buffer [original]: ({})", join_str<DataType>(consumer_buffer)));
-                    filter_window<DataType, FilterWeightDataType>(consumer_buffer, filter_weights, front_offset, back_offset);
+                    filter_window<DataType, FilterWeightDataType, window_size>(consumer_buffer, filter_weights, front_offset, back_offset);
                     Log(std::format("RX Buffer [filtered]: ({})", join_str<DataType>(consumer_buffer)));
 
                     threshold_copy<DataType, ThresholdDataType>(consumer_buffer, thresholded_data, threshold, front_offset, back_offset);
@@ -79,7 +80,7 @@ namespace cynlr{
                 thresholded_data.clear();
                 
                 Log(std::format("RX Buffer [original]: ({})", join_str<DataType>(tail_buffer)));
-                filter_window<DataType, FilterWeightDataType>(tail_buffer, filter_weights, front_offset, back_offset);
+                filter_window<DataType, FilterWeightDataType, window_size>(tail_buffer, filter_weights, front_offset, back_offset);
                 Log(std::format("RX Buffer [filtered]: ({})", join_str<DataType>(tail_buffer)));
 
                 threshold_copy<DataType, ThresholdDataType>(tail_buffer, thresholded_data, threshold, front_offset, back_offset);

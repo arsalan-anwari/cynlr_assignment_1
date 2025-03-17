@@ -23,6 +23,7 @@ namespace cynlr{
         
         static constexpr task_mode type = task_mode::testing;
         static constexpr usize swap_size = (FilterWindowRadius * 2);
+        static constexpr usize window_size = swap_size + 1;
         static constexpr usize rx_batch_size = DataPoolType::rx_batch_size;
         
         using DataType = DataPoolType::buffer_data_type;
@@ -34,6 +35,7 @@ namespace cynlr{
             threshold(threshold)
         {
             thresholded_data.reserve(rx_batch_size + settings::task_filter_threshold::MinThresholdBufferSize);
+            filtered_data.reserve(rx_batch_size + settings::task_filter_threshold::MinThresholdBufferSize);
         }
 
         auto task_settings() -> task_settings { return {"Filter & Threshold [Testing]", 0}; };
@@ -48,7 +50,7 @@ namespace cynlr{
             if(resource.receive(value)){
                 consumer_buffer[index++] = value;
                 if (index == index_end) {
-                    filter_window<DataType, FilterWeightDataType>(consumer_buffer, filter_weights, front_offset, back_offset);
+                    filter_window<DataType, FilterWeightDataType, window_size>(consumer_buffer, filtered_data, filter_weights, front_offset, back_offset);
                     threshold_copy<DataType, ThresholdDataType>(consumer_buffer, thresholded_data, threshold, front_offset, back_offset);
                     copy_tail_to_head<DataType, swap_size>(consumer_buffer, additional_back_offset_swap);
     
@@ -72,7 +74,7 @@ namespace cynlr{
                 std::span<DataType> tail_buffer = std::span<DataType>(consumer_buffer.begin(), index + front_offset); 
                 std::fill(tail_buffer.end() - back_offset, tail_buffer.end(), static_cast<DataType>(0u));
                 
-                filter_window<DataType, FilterWeightDataType>(tail_buffer, filter_weights, front_offset, back_offset);
+                filter_window<DataType, FilterWeightDataType, window_size>(tail_buffer, filtered_data, filter_weights, front_offset, back_offset);
                 threshold_copy<DataType, ThresholdDataType>(tail_buffer, thresholded_data, threshold, front_offset, back_offset);
             }
             return task_response::success; 
@@ -82,10 +84,19 @@ namespace cynlr{
             return thresholded_data;
         }
 
+        auto get_filtered_data() -> std::span<const DataType> {
+            return filtered_data;
+        }
+
     private:
     
         DataType value;
         DataType threshold;
+
+        const std::array<FilterWeightDataType, swap_size + 1>& filter_weights;
+        std::array<DataType, rx_batch_size + swap_size> consumer_buffer = {0};
+        std::vector<ThresholdDataType> thresholded_data;
+        std::vector<DataType> filtered_data;
 
         bool first_time = true;
         size_t index = FilterWindowRadius;
@@ -96,13 +107,8 @@ namespace cynlr{
         size_t index_end = buffer_size - front_offset; // in first iteration ignore the last n elements
         size_t additional_back_offset_swap = FilterWindowRadius;
         
-        const std::array<FilterWeightDataType, swap_size + 1>& filter_weights;
-        std::array<DataType, rx_batch_size + swap_size> consumer_buffer = {0};
-        std::vector<ThresholdDataType> thresholded_data;
-        
         DataPoolType::buffer_type& resource;
         DataPoolType::flag_type& tx_done;
-        
     };
 
 

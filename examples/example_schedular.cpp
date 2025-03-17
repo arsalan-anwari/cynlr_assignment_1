@@ -17,7 +17,7 @@ struct TaskA {
 		return task_response::success;
     }
     
-    std::expected<task_response, task_error> end() { 
+    std::expected<task_response, task_error> stop() { 
 		Log("TaskA exit");
 		return task_response::success; 
 	}
@@ -40,7 +40,7 @@ struct TaskB {
 		return task_response::yield;
     }
     
-    std::expected<task_response, task_error> end() { 
+    std::expected<task_response, task_error> stop() { 
 		Log("TaskB exit");
 		return task_response::success; 
 	}
@@ -62,7 +62,7 @@ struct TaskC {
 		return counter > 10 ? task_response::stop : task_response::success;
     }
     
-    std::expected<task_response, task_error> end() { 
+    std::expected<task_response, task_error> stop() { 
 		Log("TaskC exit");
 		return task_response::success; 
 	}
@@ -84,7 +84,8 @@ int main() {
 
     usize counter{0};
 
-    sched.start([&sched, &counter, handleB](){
+    sched.start(1'000'000'000,
+        [&sched, &counter, handleB](){
         if (counter == 5){ 
             Log("Stopping TaskB from main thread");
             sched.stop_task(handleB); 
@@ -96,7 +97,7 @@ int main() {
         Log(std::format("Main thread running iteration [{}]", counter));
         counter++;
         return schedular_response::success;
-    }, 1'000'000'000);
+    });
 
     return 0;
 }

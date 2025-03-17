@@ -1,5 +1,6 @@
 #pragma once
 
+#include <any>
 #include <cinttypes>
 #include <string_view>
 
@@ -25,6 +26,7 @@ using str = std::string;
 using cstr = std::string_view;
 
 using time_ns = isize;
+using any = std::any;
 
 
 

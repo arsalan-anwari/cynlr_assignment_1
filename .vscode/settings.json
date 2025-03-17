@@ -79,7 +79,16 @@
         "any": "cpp",
         "fstream": "cpp",
         "set": "cpp",
-        "regex": "cpp"
+        "regex": "cpp",
+        "numeric": "cpp",
+        "condition_variable": "cpp",
+        "variant": "cpp",
+        "csignal": "cpp",
+        "deque": "cpp",
+        "future": "cpp",
+        "ranges": "cpp",
+        "stack": "cpp",
+        "string_view": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
