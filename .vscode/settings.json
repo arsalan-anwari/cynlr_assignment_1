@@ -76,7 +76,10 @@
         "iomanip": "cpp",
         "sstream": "cpp",
         "functional": "cpp",
-        "any": "cpp"
+        "any": "cpp",
+        "fstream": "cpp",
+        "set": "cpp",
+        "regex": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

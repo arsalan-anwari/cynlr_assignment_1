@@ -1,6 +1,6 @@
 constexpr size_t TX_BATCH_SIZE = 2;
 constexpr size_t TX_DATA_SIZE = 646;
-constexpr size_t TX_NUM_ITERATIONS = roundUp(TX_DATA_SIZE, TX_BATCH_SIZE);
+constexpr size_t TX_NUM_ITERATIONS = clamp_top(TX_DATA_SIZE, TX_BATCH_SIZE);
 
 constexpr uint8_t RX_THRESHOLD = 175;
 

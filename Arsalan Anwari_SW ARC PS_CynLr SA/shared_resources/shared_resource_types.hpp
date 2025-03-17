@@ -36,7 +36,7 @@ namespace cynlr{
 
     template<typename T, typename DataType>
     concept shared_resource_like = requires(T resource, DataType in, DataType& out) {
-        { T::type } -> std::same_as<resource_type>; // Ensure it has a static `resource_type`
+        { T::type } -> std::convertible_to<resource_type>;
         { resource.receive(out) } -> std::same_as<std::expected<void, resource_type_error>>;
         { resource.transmit(in) } -> std::same_as<std::expected<void, resource_type_error>>;
     };
