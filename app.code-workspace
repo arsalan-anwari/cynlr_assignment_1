@@ -91,7 +91,17 @@
             "xlocnum": "cpp",
             "xloctime": "cpp",
             "__nullptr": "cpp",
-            "iostream": "cpp"
+            "iostream": "cpp",
+            "cinttypes": "cpp",
+            "condition_variable": "cpp",
+            "map": "cpp",
+            "set": "cpp",
+            "xstddef": "cpp",
+            "xtree": "cpp",
+            "expected": "cpp",
+            "numeric": "cpp",
+            "regex": "cpp",
+            "unordered_set": "cpp"
         }
         
     }

@@ -6,7 +6,9 @@ To get a better overview why certain choices where made in the project and how t
 
 The product is a `header-only` library which can in used within your project by adding it as an include_directory for your target in `CMake`
 
-Examples can be found in folder `examples` or refer to the `--help` arguments. 
+Unit tests can be found in folder `test`. Testcases can be called as individual targets or using `ctest` command line tool. 
+
+Functional test and examples can be found in folder `examples` or refer to the `--help` arguments. Also refer to log output of functional tests in `res` folder.
 
 There are 3 modes of operation:
 1. Debug: Print out each TX and RX transaction in realtime

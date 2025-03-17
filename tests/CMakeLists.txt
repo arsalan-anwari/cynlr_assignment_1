@@ -1,5 +1,5 @@
 # Include application source directory for headers
-# include_directories("${PROJECT_SOURCE_DIR}/app")
+include_directories("${PROJECT_SOURCE_DIR}/app")
 
 # FetchContent for Catch2
 include(FetchContent)
@@ -13,8 +13,11 @@ FetchContent_MakeAvailable(googletest)
 
 set(
     TESTS 
-    test_a.cpp
-    test_b.cpp
+    test_algorithms.cpp
+    test_traits.cpp
+    test_args.cpp
+    test_csv_reader.cpp
+    test_data_pool.cpp
 )
 
 include(GoogleTest)

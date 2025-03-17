@@ -80,8 +80,4 @@ namespace cynlr{
         }
     }
 
-    
-
-
-
 } // namespace cynlr

@@ -65,7 +65,7 @@ namespace cynlr {
                         if constexpr (std::is_same_v<T, float> || std::is_same_v<T, double>) {
                             value = std::stod(token);  // For floating-point types
                         } else {
-                            value = static_cast<T>(std::stoi(token));  // For integers or other types
+                            value = static_cast<T>(std::stoll(token));  // For integers or other types
                         }
                     } catch (const std::exception& e) {
                         Log(std::format("Error: Invalid data format! Could not convert element {} to type {}", token, type_format_trait::type_info<T>::name()));
